@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 // Due to the time limit, I did not have time to correctly
 // break out this component into multiple components
 // to take advantage of server-side rendering
@@ -153,15 +154,15 @@ export default function Home() {
                 </select>
                 <div className="flex flex-row gap-2">
                   {/* Given more time, I would have used buttons from a library to look nice */}
-                  <button
+                  <Button
                     onClick={() => cancelEditTask()}
-                    className="bg-red-500"
+                    variant={"destructive"}
                   >
                     Cancel
-                  </button>
-                  <button onClick={() => editTask()} className="bg-green-500">
+                  </Button>
+                  <Button onClick={() => editTask()} variant={"secondary"}>
                     Edit Task
-                  </button>
+                  </Button>
                 </div>
               </div>
             </>
@@ -184,7 +185,7 @@ export default function Home() {
                   value={newTaskDescription}
                   onChange={(e) => setNewTaskDescription(e.target.value)}
                 />
-                <button onClick={() => addTask()}>Add Task</button>
+                <Button onClick={() => addTask()}>Add Task</Button>
               </div>
             </>
           )}
@@ -206,18 +207,18 @@ export default function Home() {
               <p className="text-gray-600">{task.description}</p>
             </div>
             <div className="flex flex-row gap-2">
-              <button
-                className="bg-amber-700 text-white  p-2"
+              <Button
+                variant={"secondary"}
                 onClick={() => startEditTask(task)}
               >
                 Edit
-              </button>
-              <button
-                className="bg-red-900 text-white p-2"
+              </Button>
+              <Button
+                variant={"destructive"}
                 onClick={() => promptDelete(task.id)}
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </div>
         ))}
