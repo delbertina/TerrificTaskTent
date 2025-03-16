@@ -8,7 +8,7 @@ Given more time, I would have setup a docker file to ensure the project runs on 
 
 These instructions assume that the user's computer has a recent version of npm installed on their machine as well as an active internet connection.
 
-First, update the app.module file with the correct username, password, and database name. Ensure the PostgreSQL is running before continuing. (Given more time, I would have updated this to use env vars)
+First, copy the `.example.env` file and rename to `.env` and fill in with the correct username, password, and database name. Ensure the PostgreSQL is running before continuing.
 
 Next, navigate inside each the front and back folders and install the dependencies.
 
