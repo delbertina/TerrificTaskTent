@@ -9,7 +9,6 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      // With more time, move this to env variables
       type: 'postgres',
       host: 'localhost',
       port: 5432,

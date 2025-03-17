@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { Task } from './task.entity';
 import { UpdateResult } from 'typeorm';
@@ -18,15 +18,15 @@ export class TaskController {
   }
 
   @Post()
-  create(@Body() Task: Partial<Task>): Promise<Task> {
-    return this.taskService.create(Task);
+  create(@Body() task: Partial<Task>): Promise<Task> {
+    return this.taskService.create(task);
   }
 
   @Put(':id')
   update(
     @Param('id') id: number,
     @Body() Task: Partial<Task>,
-  ): Promise<UpdateResult> {
+  ): Promise<Task> {
     return this.taskService.update(id, Task);
   }
 
