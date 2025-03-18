@@ -81,12 +81,9 @@ export default function Home() {
     setEditTaskId(-1);
   };
 
-  // I was right at the time limit when I remembered that the edit api method
-  // was not returning the updated object. Given more time I would have fixed that
-  // to cut down on API calls needed
   const editTask = async () => {
     try {
-      await fetch(`http://localhost:3000/task/${editTaskId}`, {
+      const result = await fetch(`http://localhost:3000/task/${editTaskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -97,11 +94,12 @@ export default function Home() {
           status: editTaskStatus,
         }),
       });
+      const updatedTask = await result.json();
+      setTasks(tasks.map((task) => (task.id === editTaskId ? updatedTask : task)));
       setNewTaskName("");
       setNewTaskDescription("");
       setEditTaskStatus(TaskStatus.PENDING);
       setEditTaskId(-1);
-      fetchTasks();
     } catch (error) {
       console.error(error);
     }
