@@ -9,19 +9,47 @@ const EditTask: React.FC = () => {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(TaskStatus.PENDING);
   const [isLoading, setIsLoading] = useState(false);
-  const id = useParams().id;
+  const id = parseInt(useParams().id + "");
   const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    editTask();
+    if (!id || id < 1) {
+      addTask();
+    } else {
+      editTask();
+    }
   };
 
   const editTask = async () => {
     try {
       await fetch(`http://localhost:3000/task/${id}`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          status,
+        }),
+      });
+      setTitle("");
+      setDescription("");
+      setStatus(TaskStatus.PENDING);
+      setIsLoading(false);
+      // route back to list
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addTask = async () => {
+    try {
+      await fetch("http://localhost:3000/task", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -56,7 +84,9 @@ const EditTask: React.FC = () => {
         console.error(error);
       }
     };
-    fetchTask();
+    if (id > 0) {
+      fetchTask();
+    }
   }, [id]);
 
   return (

@@ -9,37 +9,6 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  // Due to the time limit, I had to cut corners
-  // The new and edit forms both use the same state
-  // Given more time, would make theme their own components
-  // and display in a modal or new route
-  // const [newTaskName, setNewTaskName] = useState<string>("");
-  // const [newTaskDescription, setNewTaskDescription] = useState<string>("");
-  // const [editTaskStatus, setEditTaskStatus] = useState<TaskStatus>(
-  //   TaskStatus.PENDING
-  // );
-  // const [editTaskId, setEditTaskId] = useState<number>(-1);
-
-  // const addTask = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:3000/task", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         title: newTaskName,
-  //         description: newTaskDescription,
-  //       }),
-  //     });
-  //     const data = await response.json();
-  //     setTasks([...tasks, data]);
-  //     setNewTaskName("");
-  //     setNewTaskDescription("");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const promptDelete = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
@@ -53,44 +22,6 @@ export default function Home() {
       }
     }
   };
-
-  // const startEditTask = (task: Task) => {
-  //   setNewTaskName(task.title);
-  //   setNewTaskDescription(task.description || "");
-  //   setEditTaskStatus(task.status);
-  //   setEditTaskId(task.id);
-  // };
-
-  // const cancelEditTask = () => {
-  //   setNewTaskName("");
-  //   setNewTaskDescription("");
-  //   setEditTaskStatus(TaskStatus.PENDING);
-  //   setEditTaskId(-1);
-  // };
-
-  // const editTask = async () => {
-  //   try {
-  //     const result = await fetch(`http://localhost:3000/task/${editTaskId}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         title: newTaskName,
-  //         description: newTaskDescription,
-  //         status: editTaskStatus,
-  //       }),
-  //     });
-  //     const updatedTask = await result.json();
-  //     setTasks(tasks.map((task) => (task.id === editTaskId ? updatedTask : task)));
-  //     setNewTaskName("");
-  //     setNewTaskDescription("");
-  //     setEditTaskStatus(TaskStatus.PENDING);
-  //     setEditTaskId(-1);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const fetchTasks = async () => {
     try {
@@ -109,6 +40,9 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-items-center min-h-screen p-8 gap-4 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <h1 className="text-4xl font-bold">Tasks</h1>
+      <Link href={`/task/${0}`}>
+        <Button variant={"default"}>Add</Button>
+      </Link>
       {tasks.length === 0 && <p>No tasks yet, add one!</p>}
       {/* Due to the time limit, could not add the filtering and sorting */}
       <div className="flex flex-col gap-4">
@@ -124,9 +58,7 @@ export default function Home() {
               <p className="text-gray-600">{task.description}</p>
             </div>
             <div className="flex flex-row gap-2">
-              <Link
-                href={`/task/${task.id}`}
-              >
+              <Link href={`/task/${task.id}`}>
                 <Button variant={"secondary"}>Edit</Button>
               </Link>
               <Button
