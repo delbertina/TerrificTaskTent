@@ -1,4 +1,5 @@
 "use client";
+import { DeleteTask, GetTasks } from "@/api/api";
 import { Button } from "@/components/ui/button";
 import { Task } from "@/types/task";
 import Link from "next/link";
@@ -14,9 +15,7 @@ export default function Home() {
   const promptDelete = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
-        await fetch(`http://localhost:3000/task/${id}`, {
-          method: "DELETE",
-        });
+        await DeleteTask(id);
         setTasks(tasks.filter((task) => task.id !== id));
       } catch (error) {
         console.error(error);
@@ -27,8 +26,7 @@ export default function Home() {
   const fetchTasks = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/task");
-      const data = await response.json();
+      const data = await GetTasks();
       setTasks(data);
     } catch (error) {
       console.error(error);
