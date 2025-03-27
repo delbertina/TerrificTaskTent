@@ -1,7 +1,8 @@
 "use client";
 import { DeleteTask, GetTasks } from "@/api/api";
 import { Button } from "@/components/ui/button";
-import { Task } from "@/types/task";
+import { Task, TaskStatus } from "@/types/task";
+import { CircleCheckBig, CircleDashed, CircleEllipsis } from "lucide-react";
 import Link from "next/link";
 // Due to the time limit, I did not have time to correctly
 // break out this component into multiple components
@@ -60,7 +61,15 @@ export default function Home() {
                 {/* handle text overflow and added an actual icon library among many other things*/}
                 <div className="flex flex-col gap-2 pb-4">
                   <div className="flex flex-row">
-                    <p>({task.status} icon)</p>
+                    {task.status === TaskStatus.PENDING && (
+                      <CircleDashed className="mr-2" />
+                    )}
+                    {task.status === TaskStatus.IN_PROGRESS && (
+                      <CircleEllipsis className="mr-2" />
+                    )}
+                    {task.status === TaskStatus.COMPLETED && (
+                      <CircleCheckBig className="mr-2" />
+                    )}
                     <h2 className="text-lg font-semibold mb-2 ">
                       {task.title}
                     </h2>
