@@ -1,6 +1,7 @@
 "use client";
 import { DeleteTask, GetTasks } from "@/api/api";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading_spinner";
 import { Task, TaskStatus } from "@/types/task";
 import { CircleCheckBig, CircleDashed, CircleEllipsis } from "lucide-react";
 import Link from "next/link";
@@ -46,7 +47,7 @@ export default function Home() {
       <Link href={`/task/${0}`}>
         <Button variant={"default"}>Add</Button>
       </Link>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <LoadingSpinner />}
       {!isLoading && (
         <div>
           {tasks.length === 0 && <p>No tasks yet, add one!</p>}
