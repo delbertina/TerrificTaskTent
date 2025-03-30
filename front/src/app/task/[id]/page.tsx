@@ -3,6 +3,23 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { TaskStatus } from "@/types/task";
 import { Button } from "@/components/ui/button";
+import { CircleDashed, CircleEllipsis, CircleCheckBig } from "lucide-react";
+import { z } from "zod";
+
+const taskFormSchema = z.object({
+  title: z.string({
+    required_error: 'Title is required',
+  })
+    .min(1, 'Title must be at least 1 character long')
+    .max(50, 'Title must be no more than 50 characters long'),
+  description: z.string({
+    required_error: 'Description is required',
+  })
+    .min(1, 'Description must be at least 1 character long'),
+  status: z.nativeEnum(TaskStatus, {
+    required_error: 'Status is required',
+  }),
+});
 
 const EditTask: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -128,9 +145,9 @@ const EditTask: React.FC = () => {
             value={status}
             onChange={(event) => setStatus(event.target.value as TaskStatus)}
           >
-            <option value="pending">Pending</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value="pending"><div><CircleDashed />Pending</div></option>
+            <option value="in-progress"><CircleEllipsis /> In Progress</option>
+            <option value="completed"><CircleCheckBig /> Completed</option>
           </select>
         </div>
         <Button disabled={isLoading} type="submit">
