@@ -5,19 +5,22 @@ import { TaskStatus } from "@/types/task";
 import { Button } from "@/components/ui/button";
 import { CircleDashed, CircleEllipsis, CircleCheckBig } from "lucide-react";
 import { z } from "zod";
+import { AddTask } from "@/api/api";
 
 const taskFormSchema = z.object({
-  title: z.string({
-    required_error: 'Title is required',
-  })
-    .min(1, 'Title must be at least 1 character long')
-    .max(50, 'Title must be no more than 50 characters long'),
-  description: z.string({
-    required_error: 'Description is required',
-  })
-    .min(1, 'Description must be at least 1 character long'),
+  title: z
+    .string({
+      required_error: "Title is required",
+    })
+    .min(1, "Title must be at least 1 character long")
+    .max(50, "Title must be no more than 50 characters long"),
+  description: z
+    .string({
+      required_error: "Description is required",
+    })
+    .min(1, "Description must be at least 1 character long"),
   status: z.nativeEnum(TaskStatus, {
-    required_error: 'Status is required',
+    required_error: "Status is required",
   }),
 });
 
@@ -39,25 +42,18 @@ const EditTask: React.FC = () => {
     }
   };
 
+  const completeSubmission = () => {
+    setTitle("");
+    setDescription("");
+    setStatus(TaskStatus.PENDING);
+    setIsLoading(false);
+    router.push("/");
+  };
+
   const editTask = async () => {
     try {
-      await fetch(`http://localhost:3000/task/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          status,
-        }),
-      });
-      setTitle("");
-      setDescription("");
-      setStatus(TaskStatus.PENDING);
-      setIsLoading(false);
-      // route back to list
-      router.push("/");
+      await EditTask({ id, title, description, status });
+      completeSubmission();
     } catch (error) {
       console.error(error);
     }
@@ -65,23 +61,8 @@ const EditTask: React.FC = () => {
 
   const addTask = async () => {
     try {
-      await fetch("http://localhost:3000/task", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          status,
-        }),
-      });
-      setTitle("");
-      setDescription("");
-      setStatus(TaskStatus.PENDING);
-      setIsLoading(false);
-      // route back to list
-      router.push("/");
+      await AddTask({id: 0, title, description, status });
+      completeSubmission();
     } catch (error) {
       console.error(error);
     }
@@ -145,9 +126,18 @@ const EditTask: React.FC = () => {
             value={status}
             onChange={(event) => setStatus(event.target.value as TaskStatus)}
           >
-            <option value="pending"><div><CircleDashed />Pending</div></option>
-            <option value="in-progress"><CircleEllipsis /> In Progress</option>
-            <option value="completed"><CircleCheckBig /> Completed</option>
+            <option value="pending">
+              <div>
+                <CircleDashed />
+                Pending
+              </div>
+            </option>
+            <option value="in-progress">
+              <CircleEllipsis /> In Progress
+            </option>
+            <option value="completed">
+              <CircleCheckBig /> Completed
+            </option>
           </select>
         </div>
         <Button disabled={isLoading} type="submit">
