@@ -5,7 +5,7 @@ import { TaskStatus } from "@/types/task";
 import { Button } from "@/components/ui/button";
 import { CircleDashed, CircleEllipsis, CircleCheckBig } from "lucide-react";
 import { z } from "zod";
-import { AddTask } from "@/api/api";
+import { AddTask, getTask } from "@/api/api";
 
 const taskFormSchema = z.object({
   title: z
@@ -71,11 +71,10 @@ const EditTask: React.FC = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/task/${id}`);
-        const data = await response.json();
+        const data = await getTask(id);
         console.log(data);
         setTitle(data.title);
-        setDescription(data.description);
+        setDescription(data.description??"");
         setStatus(data.status);
         setIsLoading(false);
       } catch (error) {
